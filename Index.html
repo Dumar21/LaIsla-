@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Isla 🏝️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#080E1A;
+  --surface:rgba(255,255,255,0.04);
+  --surface-hover:rgba(255,255,255,0.08);
+  --border:rgba(255,255,255,0.09);
+  --border-hover:rgba(255,255,255,0.22);
+  --txt:#F0EDE6;
+  --muted:#7A8FA0;
+  --accent:#FF5E3A;
+  --accent2:#FFB347;
+  --teal:#3EC9E0;
+  --discord:#5865F2;
+}
+
+body{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  background:var(--bg);
+  color:var(--txt);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* grain overlay */
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:0.035;
+  pointer-events:none;
+}
+
+/* glow blobs */
+.blob1,.blob2{
+  position:fixed;border-radius:50%;
+  pointer-events:none;z-index:0;
+  filter:blur(90px);opacity:0.18;
+}
+.blob1{
+  width:500px;height:500px;
+  background:radial-gradient(circle,#3EC9E0,transparent 70%);
+  top:-120px;left:-100px;
+}
+.blob2{
+  width:400px;height:400px;
+  background:radial-gradient(circle,#FF5E3A,transparent 70%);
+  bottom:-80px;right:-80px;
+}
+
+.wrap{
+  position:relative;z-index:1;
+  max-width:480px;margin:0 auto;
+  padding:52px 18px 64px;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+}
+
+/* ── HEADER ── */
+.hdr{text-align:center;margin-bottom:8px;animation:up .7s ease both}
+.hdr-tag{
+  display:inline-block;
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--teal);border:1px solid rgba(62,201,224,0.3);
+  border-radius:100px;padding:4px 14px;margin-bottom:18px;
+}
+.hdr-title{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(64px,18vw,96px);
+  line-height:.95;letter-spacing:-1px;
+  color:var(--txt);
+  margin-bottom:10px;
+}
+.hdr-sub{
+  font-size:13px;color:var(--muted);
+  font-weight:300;letter-spacing:.5px;
+}
+
+/* ── GAME CARD ── */
+.game-card{
+  width:100%;
+  border-radius:22px;
+  overflow:hidden;
+  text-decoration:none;display:block;
+  border:1px solid rgba(62,201,224,0.2);
+  background:#0C1825;
+  transition:transform .3s,box-shadow .3s,border-color .3s;
+  animation:up .7s .1s ease both;
+  box-shadow:0 4px 40px rgba(62,201,224,0.08);
+}
+.game-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(62,201,224,0.45);
+  box-shadow:0 16px 60px rgba(62,201,224,0.18);
+}
+
+.game-img-wrap{position:relative;overflow:hidden;}
+.game-img{
+  width:100%;aspect-ratio:16/9;
+  object-fit:cover;display:block;
+  transition:transform .5s ease;
+}
+.game-card:hover .game-img{transform:scale(1.04);}
+
+.game-img-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 40%,#0C1825 100%);
+}
+
+.play-pill{
+  position:absolute;top:14px;left:14px;
+  display:flex;align-items:center;gap:7px;
+  background:rgba(8,14,26,0.75);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:100px;padding:5px 14px 5px 10px;
+  font-size:11px;font-weight:600;letter-spacing:.5px;
+  color:var(--txt);
+}
+.play-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#4ADE80;
+  box-shadow:0 0 8px #4ADE80;
+  animation:blink 1.8s infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.game-body{padding:20px 22px 22px;}
+.game-label{
+  font-size:10px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:8px;display:block;
+}
+.game-name{
+  font-family:'Anton',sans-serif;
+  font-size:30px;letter-spacing:-.5px;
+  color:var(--txt);margin-bottom:6px;
+}
+.game-desc{
+  font-size:13px;color:var(--muted);
+  line-height:1.55;margin-bottom:18px;
+  font-weight:300;
+}
+.game-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  background:linear-gradient(135deg,#FF5E3A,#FF8C42);
+  color:#fff;font-weight:700;font-size:14px;
+  padding:12px 26px;border-radius:100px;
+  letter-spacing:.3px;
+  box-shadow:0 6px 24px rgba(255,94,58,0.45);
+  transition:transform .2s,box-shadow .2s;
+}
+.game-card:hover .game-btn{
+  transform:scale(1.04);
+  box-shadow:0 10px 36px rgba(255,94,58,0.6);
+}
+.btn-arr{transition:transform .2s}
+.game-card:hover .btn-arr{transform:translateX(4px)}
+
+/* ── LINK CARDS ── */
+.links-grid{
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.lnk{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px 16px;
+  text-decoration:none;
+  display:flex;flex-direction:column;gap:10px;
+  transition:background .25s,border-color .25s,transform .25s;
+  animation:up .7s ease both;
+}
+.lnk:hover{
+  background:var(--surface-hover);
+  border-color:var(--border-hover);
+  transform:translateY(-3px);
+}
+
+/* discord — misma celda pero con color propio */
+.lnk-discord{
+  background:rgba(88,101,242,0.1);
+  border-color:rgba(88,101,242,0.3);
+}
+.lnk-discord:hover{
+  background:rgba(88,101,242,0.18);
+  border-color:rgba(88,101,242,0.55);
+  transform:translateY(-3px);
+}
+
+.lnk-ig:hover{border-color:rgba(255,94,58,.4);background:rgba(255,94,58,.06)}
+.lnk-tt:hover{border-color:rgba(255,179,71,.4);background:rgba(255,179,71,.06)}
+.lnk-rb:hover{border-color:rgba(62,201,224,.35);background:rgba(62,201,224,.06)}
+
+.lnk-icon{font-size:28px;line-height:1}
+.lnk-name{
+  font-weight:700;font-size:14px;
+  color:var(--txt);letter-spacing:-.2px;
+}
+.lnk-handle{font-size:11px;color:var(--muted);}
+.lnk-info{display:flex;flex-direction:column;gap:3px}
+
+.lnk-discord .lnk-icon{font-size:30px}
+.lnk-discord .lnk-name{font-size:16px;font-weight:700;color:#818cf8}
+.lnk-discord .lnk-handle{font-size:12px;color:rgba(129,140,248,.7)}
+
+.lnk-arrow{
+  font-size:18px;color:var(--muted);
+  transition:transform .2s,color .2s;
+  flex-shrink:0;
+}
+.lnk:hover .lnk-arrow{transform:translateX(4px);color:var(--txt)}
+
+.discord-badge{
+  display:inline-block;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  background:rgba(88,101,242,0.25);border:1px solid rgba(88,101,242,.4);
+  color:#818cf8;border-radius:100px;padding:3px 10px;margin-bottom:4px;
+}
+
+/* ── FOOTER ── */
+.foot{
+  margin-top:16px;font-size:11px;
+  color:rgba(122,143,160,.45);
+  letter-spacing:1px;text-align:center;
+  animation:up .7s .5s ease both;
+}
+
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.lnk:nth-child(1){animation-delay:.2s}
+.lnk:nth-child(2){animation-delay:.25s}
+.lnk:nth-child(3){animation-delay:.3s}
+.lnk:nth-child(4){animation-delay:.35s}
+
+/* ── MOBILE ── */
+@media(max-width:400px){
+  .hdr-title{font-size:72px}
+  .links-grid{grid-template-columns:1fr}
+  .lnk-discord{grid-column:span 1}
+  .lnk-discord{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="blob1"></div>
+<div class="blob2"></div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="hdr">
+    <span class="hdr-tag">Juego de Fiesta</span>
+    <h1 class="hdr-title">LA ISLA 🌴</h1>
+    <p class="hdr-sub">Todo lo que necesitas en un solo lugar</p>
+  </header>
+
+  <!-- JUEGO -->
+  <a href="https://www.roblox.com/es/games/11926754519/La-isla" target="_blank" rel="noopener" class="game-card">
+    <div class="game-img-wrap">
+      <img
+        class="game-img"
+        src="https://tr.rbxcdn.com/180DAY-f18700a7e62ff61c5e8c4a7473c12b2f/500/280/Image/Jpeg/noFilter"
+        alt="La Isla — captura del juego"
+        loading="eager"
+      >
+      <div class="game-img-overlay"></div>
+      <div class="play-pill">
+        <span class="play-dot"></span>
+        En línea ahora
+      </div>
+    </div>
+    <div class="game-body">
+      <span class="game-label">🎮 Roblox · Juego de fiesta</span>
+      <h2 class="game-name">La Isla 🏝️</h2>
+      <p class="game-desc">Baila, compite y vive la fiesta más loca de Roblox. ¡La isla te espera!</p>
+      <span class="game-btn">
+        Jugar ahora
+        <span class="btn-arr">→</span>
+      </span>
+    </div>
+  </a>
+
+  <!-- LINKS -->
+  <div class="links-grid">
+
+    <a href="https://www.roblox.com/es/communities/16949754/Maraton-de-bailes#!/about" target="_blank" rel="noopener" class="lnk lnk-rb">
+      <span class="lnk-icon">👥</span>
+      <div class="lnk-info">
+        <span class="lnk-name">Grupo Roblox</span>
+        <span class="lnk-handle">Maratón de Bailes</span>
+      </div>
+    </a>
+
+    <a href="https://www.instagram.com/laislaofc/" target="_blank" rel="noopener" class="lnk lnk-ig">
+      <span class="lnk-icon">📸</span>
+      <div class="lnk-info">
+        <span class="lnk-name">Instagram</span>
+        <span class="lnk-handle">@laislaofc</span>
+      </div>
+    </a>
+
+    <a href="https://www.tiktok.com/@la.isla568" target="_blank" rel="noopener" class="lnk lnk-tt">
+      <span class="lnk-icon">🎵</span>
+      <div class="lnk-info">
+        <span class="lnk-name">TikTok</span>
+        <span class="lnk-handle">@la.isla568</span>
+      </div>
+    </a>
+
+    <a href="https://discord.gg/CuKtJa67p" target="_blank" rel="noopener" class="lnk lnk-discord">
+      <span class="lnk-icon">💬</span>
+      <div class="lnk-info">
+        <span class="lnk-name" style="color:#818cf8">Discord</span>
+        <span class="lnk-handle" style="color:rgba(129,140,248,.65)">Únete al servidor</span>
+      </div>
+    </a>
+
+  </div>
+
+  <p class="foot">🌴 Síguenos para estar al tanto de todo 🌴</p>
+
+</div>
+</body>
+</html>
